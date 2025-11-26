@@ -1,0 +1,43 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: minio
+  namespace: argocd
+spec:
+  project: default
+  source:
+    chart: minio
+    repoURL: https://charts.bitnami.com/bitnami
+    targetRevision: 12.8.14
+    helm:
+      parameters:
+        # Authentication (Keep it simple for the lab)
+        - name: auth.rootUser
+          value: "admin"
+        - name: auth.rootPassword
+          value: "minioadmin"
+        
+        # Architecture (Save RAM, let Longhorn handle safety)
+        - name: mode
+          value: "standalone"
+        - name: resources.limits.memory
+          value: "512Mi"
+        
+        # Storage (Connect to Longhorn)
+        - name: persistence.storageClass
+          value: "longhorn"
+        - name: persistence.size
+          value: "10Gi"
+        
+        # Disable fancy features to save RAM
+        - name: metrics.enabled
+          value: "false"
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: minio-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
