@@ -12,9 +12,20 @@ spec:
     helm:
       parameters:
         - name: persistence.defaultClassReplicaCount
-          value: "2"  # Keep 2 copies of data (saves space on small cluster)
+          value: "2"
         - name: defaultSettings.createDefaultDiskLabeledNodes
           value: "true"
+        - name: csi.attacher.replicaCount
+          value: "1"
+        - name: csi.provisioner.replicaCount
+          value: "1"
+        - name: csi.resizer.replicaCount
+          value: "1"
+        - name: csi.snapshotter.replicaCount
+          value: "1"
+        # --- THE FIX IS HERE ---
+        - name: helmPreUpgradeCheckerJob.enabled
+          value: "false"
   destination:
     server: "https://kubernetes.default.svc"
     namespace: longhorn-system

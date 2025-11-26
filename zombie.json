@@ -1,0 +1,20 @@
+{
+    "apiVersion": "v1",
+    "kind": "Namespace",
+    "metadata": {
+        "annotations": {
+            "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Namespace\",\"metadata\":{\"annotations\":{},\"name\":\"longhorn-system\"},\"spec\":{},\"status\":{}}\n"
+        },
+        "creationTimestamp": "2025-11-26T03:05:09Z",
+        "deletionTimestamp": "2025-11-26T03:13:50Z",
+        "labels": {
+            "kubernetes.io/metadata.name": "longhorn-system"
+        },
+        "name": "longhorn-system",
+        "resourceVersion": "6008",
+        "uid": "a0e78ce4-ae85-4fbf-beb0-7768ad7e32b8"
+    },
+    "spec": {
+        "finalizers": []
+    }
+}
