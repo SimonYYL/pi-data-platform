@@ -3,6 +3,10 @@ kind: Application
 metadata:
   name: minio
   namespace: argocd
+  # --- NEW SECTION STARTS HERE ---
+  annotations:
+    argocd.argoproj.io/sync-wave: "5"
+  # --- NEW SECTION ENDS HERE ---
 spec:
   project: default
   source:
@@ -11,25 +15,18 @@ spec:
     targetRevision: 12.8.14
     helm:
       parameters:
-        # Authentication (Keep it simple for the lab)
         - name: auth.rootUser
           value: "admin"
         - name: auth.rootPassword
           value: "minioadmin"
-        
-        # Architecture (Save RAM, let Longhorn handle safety)
         - name: mode
           value: "standalone"
         - name: resources.limits.memory
           value: "512Mi"
-        
-        # Storage (Connect to Longhorn)
         - name: persistence.storageClass
           value: "longhorn"
         - name: persistence.size
           value: "10Gi"
-        
-        # Disable fancy features to save RAM
         - name: metrics.enabled
           value: "false"
   destination:
