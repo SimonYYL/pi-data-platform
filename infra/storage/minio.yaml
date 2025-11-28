@@ -49,13 +49,13 @@ spec:
         - name: volumePermissions.image.pullPolicy
           value: "IfNotPresent"
         
-        # FIX 4: MinIO Entrypoint Crash (Must remain)
+# FIX 4: MinIO Entrypoint Crash - Corrected Path for Official Image
         - name: command[0]
           value: "/bin/sh"
         - name: args[0]
           value: "-c"
         - name: args[1]
-          value: "exec /opt/bitnami/minio/bin/minio server /data"
+          value: "exec /usr/bin/minio server /bitnami/minio/data" # This is the standard path
   destination:
     server: https://kubernetes.default.svc
     namespace: minio-system
