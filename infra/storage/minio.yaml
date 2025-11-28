@@ -3,10 +3,8 @@ kind: Application
 metadata:
   name: minio
   namespace: argocd
-  # --- NEW SECTION STARTS HERE ---
   annotations:
     argocd.argoproj.io/sync-wave: "5"
-  # --- NEW SECTION ENDS HERE ---
 spec:
   project: default
   source:
@@ -27,14 +25,18 @@ spec:
           value: "minioadmin"
         - name: mode
           value: "standalone"
+        # FIX 1: Increased Memory Limit
         - name: resources.limits.memory
-          value: "512Mi"
+          value: "1Gi"
         - name: persistence.storageClass
           value: "longhorn"
         - name: persistence.size
           value: "10Gi"
         - name: metrics.enabled
           value: "false"
+        # FIX 2: Enable Volume Permission Fixer
+        - name: volumePermissions.enabled
+          value: "true"
   destination:
     server: "https://kubernetes.default.svc"
     namespace: minio-system
