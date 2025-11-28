@@ -13,9 +13,15 @@ spec:
     targetRevision: 14.6.1
     helm:
       parameters:
+        # --- FIX 1: Image Pull Error (Force Multi-Arch Official Image) ---
         - name: image.registry
           value: "docker.io"
-        # Removed image.repository and image.tag overrides (Fixes argument conflict)
+        - name: image.repository # ADD BACK (Was deleted)
+          value: "minio/minio"
+        - name: image.tag        # ADD BACK (Was deleted)
+          value: "latest"
+        
+        # --- Authentication & Config ---
         - name: auth.rootUser
           value: "admin"
         - name: auth.rootPassword
@@ -23,11 +29,9 @@ spec:
         - name: mode
           value: "standalone"
         
-        # FIX 1: Increased Memory Limit
+        # --- FIX 2: Memory & Storage ---
         - name: resources.limits.memory
           value: "1Gi"
-        
-        # Storage Configuration (Plan A: Longhorn)
         - name: persistence.storageClass
           value: "longhorn"
         - name: persistence.size
@@ -35,11 +39,9 @@ spec:
         - name: metrics.enabled
           value: "false"
 
-        # FIX 2: Volume Permissions & Init Container Image
+        # --- FIX 3: Volume Permissions & Init Image ---
         - name: volumePermissions.enabled
           value: "true"
-        - name: volumePermissions.image.registry
-          value: "docker.io"
         - name: volumePermissions.image.repository
           value: "library/debian"
         - name: volumePermissions.image.tag
@@ -47,7 +49,7 @@ spec:
         - name: volumePermissions.image.pullPolicy
           value: "IfNotPresent"
         
-        # FIX 3: Force MinIO Entrypoint Command
+        # FIX 4: MinIO Entrypoint Crash (Must remain)
         - name: command[0]
           value: "/bin/sh"
         - name: args[0]
