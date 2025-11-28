@@ -13,10 +13,9 @@ spec:
     targetRevision: 14.6.1
     helm:
       parameters:
-        # --- Basic Configuration ---
         - name: image.registry
           value: "docker.io"
-        # --- DELETED: image.repository and image.tag lines ---
+        # Removed image.repository and image.tag overrides (Fixes argument conflict)
         - name: auth.rootUser
           value: "admin"
         - name: auth.rootPassword
@@ -24,11 +23,11 @@ spec:
         - name: mode
           value: "standalone"
         
-        # --- FIX 1: Memory Stability ---
+        # FIX 1: Increased Memory Limit
         - name: resources.limits.memory
           value: "1Gi"
         
-        # --- Storage Configuration (Plan A: Longhorn) ---
+        # Storage Configuration (Plan A: Longhorn)
         - name: persistence.storageClass
           value: "longhorn"
         - name: persistence.size
@@ -36,7 +35,7 @@ spec:
         - name: metrics.enabled
           value: "false"
 
-        # --- FIX 2: Volume Permissions & Init Container Image ---
+        # FIX 2: Volume Permissions & Init Container Image
         - name: volumePermissions.enabled
           value: "true"
         - name: volumePermissions.image.registry
@@ -47,8 +46,16 @@ spec:
           value: "12-slim"
         - name: volumePermissions.image.pullPolicy
           value: "IfNotPresent"
+        
+        # FIX 3: Force MinIO Entrypoint Command
+        - name: command[0]
+          value: "/bin/sh"
+        - name: args[0]
+          value: "-c"
+        - name: args[1]
+          value: "exec /opt/bitnami/minio/bin/minio server /data"
   destination:
-    server: "https://kubernetes.default.svc"
+    server: https://kubernetes.default.svc
     namespace: minio-system
   syncPolicy:
     automated:
