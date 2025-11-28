@@ -16,10 +16,7 @@ spec:
         # --- Basic Configuration ---
         - name: image.registry
           value: "docker.io"
-        - name: image.repository
-          value: "minio/minio"
-        - name: image.tag
-          value: "latest"
+        # --- DELETED: image.repository and image.tag lines ---
         - name: auth.rootUser
           value: "admin"
         - name: auth.rootPassword
@@ -40,8 +37,6 @@ spec:
           value: "false"
 
         # --- FIX 2: Volume Permissions & Init Container Image ---
-        # We enable permissions, but override the default image with Debian
-        # because the default 'bitnami/os-shell' often fails on ARM64 Pis.
         - name: volumePermissions.enabled
           value: "true"
         - name: volumePermissions.image.registry
