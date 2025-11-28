@@ -13,6 +13,7 @@ spec:
     targetRevision: 14.6.1
     helm:
       parameters:
+        # --- Basic Configuration ---
         - name: image.registry
           value: "docker.io"
         - name: image.repository
@@ -25,18 +26,30 @@ spec:
           value: "minioadmin"
         - name: mode
           value: "standalone"
-        # FIX 1: Increased Memory Limit
+        
+        # --- FIX 1: Memory Stability ---
         - name: resources.limits.memory
           value: "1Gi"
+        
+        # --- Storage Configuration (Plan A: Longhorn) ---
         - name: persistence.storageClass
           value: "longhorn"
         - name: persistence.size
           value: "10Gi"
         - name: metrics.enabled
           value: "false"
-        # FIX 2: Enable Volume Permission Fixer
+
+        # --- FIX 2: Volume Permissions & Init Container Image ---
         - name: volumePermissions.enabled
           value: "true"
+        - name: volumePermissions.image.registry
+          value: "docker.io"
+        - name: volumePermissions.image.repository
+          value: "bitnami/os-shell"
+        - name: volumePermissions.image.tag
+          value: "12"
+        - name: volumePermissions.image.pullPolicy
+          value: "Always"
   destination:
     server: "https://kubernetes.default.svc"
     namespace: minio-system
