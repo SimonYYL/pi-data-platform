@@ -18,9 +18,9 @@ spec:
         - name: image.registry
           value: "docker.io"
         - name: image.repository
-          value: "minio/minio"
+          value: "bitnami/minio"
         - name: image.tag
-          value: "RELEASE.2024-11-07T00-52-20Z"
+          value: "2023.12.20-debian-11-r1"
         - name: auth.rootUser
           value: "admin"
         - name: auth.rootPassword
