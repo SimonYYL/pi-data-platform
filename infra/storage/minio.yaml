@@ -13,14 +13,6 @@ spec:
     targetRevision: 14.6.1
     helm:
       parameters:
-        # --- FIX 1: Image Pull Error (Force Multi-Arch Official Image) ---
-        - name: image.registry
-          value: "docker.io"
-        - name: image.repository # ADD BACK (Was deleted)
-          value: "minio/minio"
-        - name: image.tag        # ADD BACK (Was deleted)
-          value: "latest"
-        
         # --- Authentication & Config ---
         - name: auth.rootUser
           value: "admin"
@@ -48,14 +40,6 @@ spec:
           value: "12-slim"
         - name: volumePermissions.image.pullPolicy
           value: "IfNotPresent"
-        
-# FIX 4: MinIO Entrypoint Crash - Corrected Path for Official Image
-        - name: command[0]
-          value: "/bin/sh"
-        - name: args[0]
-          value: "-c"
-        - name: args[1]
-          value: "exec /usr/bin/minio server /bitnami/minio/data" # This is the standard path
   destination:
     server: https://kubernetes.default.svc
     namespace: minio-system

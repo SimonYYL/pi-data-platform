@@ -14,7 +14,7 @@ spec:
         - name: persistence.defaultClassReplicaCount
           value: "2"
         - name: defaultSettings.createDefaultDiskLabeledNodes
-          value: "true"
+          value: "false"
         - name: csi.attacher.replicaCount
           value: "1"
         - name: csi.provisioner.replicaCount
@@ -25,9 +25,8 @@ spec:
           value: "1"
         - name: helmPreUpgradeCheckerJob.enabled
           value: "false"
-        # --- NEW FIX BELOW ---
         - name: csi.kubeletRootDir
-          value: "/var/lib/kubelet"
+          value: "/var/lib/rancher/k3s/agent/kubelet"
   destination:
     server: "https://kubernetes.default.svc"
     namespace: longhorn-system
