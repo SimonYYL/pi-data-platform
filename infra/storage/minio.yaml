@@ -13,8 +13,12 @@ spec:
     targetRevision: 14.6.1
     helm:
       parameters:
+        - name: image.registry
+          value: "docker.io"
+        - name: image.repository
+          value: "minio/minio"
         - name: image.tag
-          value: "2024.11.11-debian-12-r0"
+          value: "latest"
         # --- Authentication & Config ---
         - name: auth.rootUser
           value: "admin"
@@ -42,6 +46,13 @@ spec:
           value: "12-slim"
         - name: volumePermissions.image.pullPolicy
           value: "IfNotPresent"
+        # Run official image with explicit command/console port and data dir
+        - name: command[0]
+          value: "/bin/sh"
+        - name: args[0]
+          value: "-c"
+        - name: args[1]
+          value: "exec /usr/bin/minio server /bitnami/minio/data --console-address :9001"
   destination:
     server: https://kubernetes.default.svc
     namespace: minio-system
